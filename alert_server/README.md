@@ -40,6 +40,17 @@
 
    Returns an alert matching `MY_UUID`, if any.
 
+* `GET` @ `url:port/manual_mode`
+
+   Returns whether or not "manual mode" is enabled.
+
+* `POST` @ `url:port/manual_mode`
+
+   Arguments:
+
+     * `manual_mode`: boolean that sets the "manual mode" state.
+
+
 
 ## Example workflow
 
