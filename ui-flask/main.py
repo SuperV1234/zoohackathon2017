@@ -138,7 +138,7 @@ def voice_call():
     call = get_twilio_client().calls.create(
         to=to,
         from_=TWILIO_FROM_PHONE,
-        url="{}/voice_handle?uuid={}&to{}".format('https://precocial-tang-6014.dataplicity.io', uuid, to)
+        url="{}/voice_handle?uuid={}&to{}".format('http://precocial-tang-6014.dataplicity.io', uuid, to)
     )
     return call.sid
 
