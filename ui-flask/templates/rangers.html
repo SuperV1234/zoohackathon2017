@@ -1,56 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block head %}
+{% endblock %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
-
-    <script src="{{ url_for('static', filename='js/jquery/jquery-3.2.1.slim.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/popper/popper-1.11.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
-</head>
-
-<body>
-
-  RANGERS ALL
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-                <img alt="Home" src="{{ url_for('static', filename='icons/home.svg') }}"/>
-            </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="users/">
-                            <img alt="Manage Team" src="{{ url_for('static', filename='icons/team.svg') }}"/>
-                        </a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="manual/">
-                            <img alt="Manual" src="{{ url_for('static', filename='icons/map.svg') }}"/>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="container">
-            {% for n in my_list %}
-                <div class="row">
-                    <button type="button" class="btn btn-block">{{n}}</button>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</body>
-
-</html>
+{% block body %}
+{% endblock %}

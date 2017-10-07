@@ -1,6 +1,7 @@
 import logging
-
 import os
+
+import requests
 from flask import Flask, request
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
@@ -19,24 +20,33 @@ def hello():
     return 'SmartAlert'
 
 
-@app.route('/sms/<uuid>/<to>/<msg>')
-def sms(uuid, to, msg):
+@app.route('/sms', methods=['POST'])
+def sms():
+    uuid, to, msg = request.form['uuid'], request.form['to'], request.form['msg']
+    if to.startswith('00'):
+        to = '+{}'.format(to[2:])
     SMS_HISTORY[to] = uuid
     message = TWILIO_CLIENT.messages.create(to=to, from_=TWILIO_FROM_PHONE, body=msg)
     return message.sid
 
 
-@app.route("/sms_respond", methods=['GET', 'POST'])
+@app.route("/sms_respond", methods=['POST'])
 def sms_reply():
     body = request.form['Body']
     from_ = request.form['From']
-    uuid = SMS_HISTORY[from_]
+    uuid = SMS_HISTORY.get(from_)
+    app.logger.info('got response {} {} {}'.format(uuid, from_, body))
 
-    logging.info('{} {} {}'.format(uuid, from_, body))
+    if uuid is not None and body:
+        requests.post('172.60.0.66:8888', data={'uuid': uuid,
+                                                "old_state": 'to_acknowledge',
+                                                "new_state": 'in_progress'})
 
-    resp = MessagingResponse()
-    resp.message('{} ACCEPT'.format(uuid))
-    return str(resp)
+        resp = MessagingResponse()
+        resp.message('{} ACCEPTED'.format(uuid))
+        return str(resp)
+
+    return None
 
 
 @app.errorhandler(500)
@@ -47,4 +57,4 @@ def server_error(e):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8888)
+    app.run(host='0.0.0.0', port=80)
