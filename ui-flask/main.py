@@ -2,6 +2,8 @@ import json
 import logging
 import os
 from datetime import datetime
+import requests
+import os
 
 import requests
 from flask import Flask, request
@@ -25,15 +27,29 @@ def serve_static(path):
 
 
 @app.route("/")
-def index():
-    alert = {
-        "type": "Ground Sensor",
-        "time": datetime.now(),
-        "label": "Elephant",
-        "id": "1234567",
-        "status": "warn"
-    }
-    return render_template('index.html', alerts=[alert, alert, alert])
+@app.route('/alerts/')
+def alerts():
+    address = os.environ["LOG_PARSER_ADDRESS"]
+    port = os.environ["LOG_PARSER_PORT"]
+    url = "http://{}:{}/get_all".format(address, port)
+    response = requests.get(url)
+    if(response.status_code != 200):
+        return render_template('alerts.html', error=True, message=response.text)
+    else:
+        alerts = list(response.json().values())
+        return render_template('alerts.html', error=False, alerts=alerts)
+
+
+@app.route('/alert/<id>')
+def alert(id):
+    address = os.environ["LOG_PARSER_ADDRESS"]
+    port = os.environ["LOG_PARSER_PORT"]
+    url = "http://{}:{}/get_single?uuid={}".format(address, port, id)
+    response = requests.get(url)
+    if(response.status_code != 200):
+        return render_template('alerts.html', error=True, message=response.text)
+    else:
+        return render_template('alert.html', error=False, alert=response.json())
 
 
 @app.route('/teams_or_rangers/')

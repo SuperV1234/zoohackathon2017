@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 {% block head %}
+
 {% endblock %}
 
 {% block body %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{error.status}} - {{error.status}}
+        </div>
+    {% else %}
+        {% for alert in alerts %}
+            <a href="alert/{{alert.uuid}}">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Time: {{alert.datetime}}</div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{alert.name|capitalize}}</h4>
+                        <p class="card-text">{{alert.label}}</p>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% endif%}
 {% endblock %}
