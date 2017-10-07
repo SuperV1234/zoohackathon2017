@@ -90,6 +90,10 @@ def watch_csv_log(path):
 
 mock_target_number = "+441234567890"
 
+def to_human_form(alert: Alert) -> str:
+    a = alert
+    return f'{a.name} ({a.label}) at {a.datetime}'
+
 class AlertDB(object):
     def __init__(self, http_client):
         self.alerts = []
@@ -100,7 +104,7 @@ class AlertDB(object):
         global mock_target_number
 
         alert.target = AlertTarget("+441234567890")
-        msg = f"ALERT: {alert}\n\nTEXT 1 TO ACKNOWLEDGE"
+        msg = f"ALERT: {to_human_form(alert)}\n\nTEXT 1 TO ACKNOWLEDGE"
         xuuid = alert.uuid;
 
         post_data = { 'uuid': xuuid, 'to': mock_target_number, 'msg': msg }
