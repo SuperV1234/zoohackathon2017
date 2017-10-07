@@ -33,3 +33,30 @@
   Returns a JSON object with the result *(`bool`)* of the state change.
 
 
+
+## Example workflow
+
+1. Start the server with:
+
+   ```bash
+   rm -f alerts.csv.offset      # remove monitoring metadata, if existing
+   ./alert_server.py alerts.csv # start server, monitor `alerts.csv`
+   ```
+
+2. Via a `GET` request, check what alerts have been dispatched, but not yet acknowledged:
+
+   ![screen](postman0.png)
+
+   *(This is meant to be executed from some UI service that is displaying the state of the system.)*
+
+3. Via a `POST` request, mutate the state of an alert:
+
+   ![screen](postman1.png)
+
+   *(This is meant to be executed from some downstream service that produces an alert in SMS/radio form.)*
+
+4. Via a `GET` request, verify that the mutation took place:
+
+   ![screen](postman2.png)
+
+   *(This is meant to be executed from some UI service that is displaying the state of the system and/or from downstream services that produce alerts for verification purposes.)*
