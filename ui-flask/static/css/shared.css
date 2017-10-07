@@ -1,0 +1,7 @@
+html, body {
+    height: 100%;
+}
+
+.navbar .navbar-brand img, .navbar .nav-item img {
+    height: 64px;
+}
