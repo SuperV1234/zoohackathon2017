@@ -11,16 +11,19 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import urllib.parse
+from datetime import datetime
+
+def cleanup_label(x):
+    return x.replace('LABELLED AS', '').replace('"', '').strip()
 
 class Alert(object):
     def __init__(self, name, sn, time, date, position, label, state, xuuid = None):
         self.uuid = uuid.uuid4() if xuuid == None else xuuid
         self.name = name
         self.sn = sn
-        self.time = time
-        self.date = date
+        self.datetime = datetime.strptime(f'{date} {time}', '%d/%m/%Y %H%M UTC')
         self.position = position
-        self.label = label
+        self.label = cleanup_label(label)
         self.state = state
         self.target = AlertTarget(None)
 
@@ -29,8 +32,7 @@ class Alert(object):
 {{
     name: {self.name}
     sn: {self.sn}
-    time: {self.time}
-    date: {self.date}
+    datetime: {self.datetime}
     position: {self.position}
     label: {self.label}
     state: {self.state}
@@ -47,10 +49,10 @@ def make_stripped_alert(alert: Alert) -> dict:
     return {
         "uuid": str(alert.uuid),
         "name": alert.name,
-        "time": alert.time,
-        "date": alert.date,
+        "datetime": str(alert.datetime),
         "label": alert.label,
         "target": alert.target.to_json(),
+        "state": alert.state,
     }
 
 def to_uuid_dict(stripped_alerts: [dict]) -> dict:
@@ -173,6 +175,15 @@ class MainHandler(tornado.web.RequestHandler):
         result = self.application.alert_db.move_between_states(uuid_val, old_state, new_state)
         self.write({"success": result})
 
+class SingleHandler(tornado.web.RequestHandler):
+    def get(self):
+        xuuid = self.get_argument('uuid', '')
+        self.write(make_stripped_alert(self.application.alert_db.from_uuid(uuid.UUID(xuuid))))
+
+class AllHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(to_uuid_dict(map_stripped_alerts(self.application.alert_db.alerts)))
+
 class AlertApp(tornado.web.Application):
     def __init__(self):
         self.alert_db = AlertDB(tornado.httpclient.AsyncHTTPClient())
@@ -180,6 +191,8 @@ class AlertApp(tornado.web.Application):
 
         super(AlertApp, self).__init__([
             (r"/", MainHandler),
+            (r"/get_single", SingleHandler),
+            (r"/get_all", AllHandler),
         ])
 
     def add_new_alert(self, alert: Alert):

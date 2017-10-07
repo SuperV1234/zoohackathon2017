@@ -32,6 +32,13 @@
 
   Returns a JSON object with the result *(`bool`)* of the state change.
 
+* `GET` @ `url:port/get_all`
+
+   Returns all alerts.
+
+* `GET` @ `url:port/get_single?uuid=MY_UUID`
+
+   Returns an alert matching `MY_UUID`, if any.
 
 
 ## Example workflow
