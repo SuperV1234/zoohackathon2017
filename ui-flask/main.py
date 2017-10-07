@@ -55,9 +55,9 @@ def alert(id):
         return render_template('alert.html', error=False, alert=response.json())
 
 
-@app.route('/dashboard/')
-def dashboard():
-    return render_template('dashboard.html')
+@app.route('/teams_or_rangers/')
+def teams_or_rangers():
+    return render_template('teams_or_rangers.html')
 
 
 @app.route('/teams/')
@@ -72,13 +72,30 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    return render_template('rangers.html')
+    lone =  {'name': 'Lone'} 
+    texas = {'name': 'Texas'} 
+    power = {'name': 'Power'} 
+    return render_template('rangers.html', rangers=[lone, texas, power])
 
 
 @app.route('/ranger/<name>')
 def ranger(name):
     return render_template('ranger.html', name=name)
 
+
+@app.route('/alerts/')
+def alerts():
+    return render_template('alerts.html')
+
+
+@app.route('/alert/<name>')
+def alert(name):
+    return render_template('alert.html', name=name)
+
+
+@app.route('/')
+def hello():
+    return 'SmartAlert'
 
 # TWILIO SMS SERVICE
 
@@ -161,4 +178,6 @@ def server_error(e):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
+
+
