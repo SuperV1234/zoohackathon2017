@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+import os
 
 from flask import Flask, send_from_directory, render_template
 
@@ -14,20 +15,27 @@ def serve_static(path):
 @app.route("/")
 @app.route('/alerts/')
 def alerts():
-    alert = {
-        "type": "Ground Sensor",
-        "time": datetime.now(),
-        "label": "Elephant",
-        "id": "1234567",
-        "status": "warn"
-    }
-    return render_template('alerts.html', alerts=[alert, alert, alert])
+    address = os.environ["LOG_PARSER_ADDRESS"]
+    port = os.environ["LOG_PARSER_PORT"]
+    url = "http://{}:{}/get_all".format(address, port)
+    response = requests.get(url)
+    if(response.status_code != 200):
+        return render_template('alerts.html', error=True, message=response.text)
+    else:
+        alerts = list(response.json().values())
+        return render_template('alerts.html', error=False, alerts=alerts)
 
 
 @app.route('/alert/<id>')
 def alert(id):
-
-    return render_template('alert.html', id=id)
+    address = os.environ["LOG_PARSER_ADDRESS"]
+    port = os.environ["LOG_PARSER_PORT"]
+    url = "http://{}:{}/get_single?uuid={}".format(address, port, id)
+    response = requests.get(url)
+    if(response.status_code != 200):
+        return render_template('alerts.html', error=True, message=response.text)
+    else:
+        return render_template('alert.html', error=False, alert=response.json())
 
 
 @app.route('/dashboard/')
