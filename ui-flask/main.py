@@ -22,9 +22,9 @@ def index():
     return render_template('index.html', alerts=[alert, alert, alert])
 
 
-@app.route('/dashboard/')
-def dashboard():
-    return render_template('dashboard.html')
+@app.route('/teams_or_rangers/')
+def teams_or_rangers():
+    return render_template('teams_or_rangers.html')
 
 
 @app.route('/teams/')
@@ -39,7 +39,10 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    return render_template('rangers.html')
+    lone =  {'name': 'Lone'} 
+    texas = {'name': 'Texas'} 
+    power = {'name': 'Power'} 
+    return render_template('rangers.html', rangers=[lone, texas, power])
 
 
 @app.route('/ranger/<name>')
@@ -58,4 +61,6 @@ def alert(name):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
+
+
