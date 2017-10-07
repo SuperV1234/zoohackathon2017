@@ -3,4 +3,28 @@
 {% endblock %}
 
 {% block body %}
+    <p>My Google Maps Demo</p>
+    <div id="map"></div>
+    <script>
+    function initMap() {
+        console.log("Called");
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: uluru
+        });
+        var marker = new google.maps.Marker({
+                position: uluru,
+        map: map
+        });
+    }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7QotcvbA1NNGwDjNa5Bwh_VaOyqAN4LU&callback=initMap">
+    </script>
+
+    <h1>Alert</h1>
+    <h3>Status: <span class="badge badge-success">Acknowledged</span></h3>
+
+
 {% endblock %}

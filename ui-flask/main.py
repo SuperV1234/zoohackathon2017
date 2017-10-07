@@ -1,4 +1,5 @@
 from datetime import datetime
+import requests
 
 from flask import Flask, send_from_directory, render_template
 
@@ -21,6 +22,12 @@ def alerts():
         "status": "warn"
     }
     return render_template('alerts.html', alerts=[alert, alert, alert])
+
+
+@app.route('/alert/<id>')
+def alert(id):
+
+    return render_template('alert.html', id=id)
 
 
 @app.route('/dashboard/')
@@ -46,11 +53,6 @@ def rangers():
 @app.route('/ranger/<name>')
 def ranger(name):
     return render_template('ranger.html', name=name)
-
-
-@app.route('/alert/<name>')
-def alert(name):
-    return render_template('alert.html', name=name)
 
 
 if __name__ == "__main__":
