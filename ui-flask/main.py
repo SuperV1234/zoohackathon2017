@@ -46,7 +46,7 @@ def alerts():
         return render_template('alerts.html', error=True, message=e.response.text)
     else:
         alerts = list(response.json().values())
-        return render_template('alerts.html', error=False, alerts=alerts)
+        return render_template('alerts.html', error=False, alerts=alerts, teams=[1,2,3,4])
 
 
 @app.route('/alert/<id>')

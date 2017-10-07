@@ -4,11 +4,63 @@
 {% endblock %}
 
 {% block body %}
+    <script>
+    function getRandom() {
+        return (Math.random() - 0.5) / 2;
+    }
+
+    function addMarker(map, lat, lng) {
+        var marker = new google.maps.Marker({
+          position: {lat:lat, lng:lng},
+          map: map
+        });
+    }
+
+    function addCircle(map, lat, lng, radius) {
+        var area_of_impact = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: {lat:lat, lng:lng},
+            radius: radius
+        });
+    }
+
+
+    function initMap() {
+        var center = {lat: -0.669482, lng: 35.787419};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 9,
+            center: center,
+            mapTypeId: 'terrain',
+            mapTypeControlOptions: {
+                position: google.maps.ControlPosition.LEFT_BOTTOM
+            }
+        });
+
+        {% for alert in alerts %}
+        addCircle(map, center.lat + getRandom(), center.lng + getRandom(), 4000 + Math.random() * 1000);
+        {% endfor %}
+
+        {% for team in teams %}
+        addMarker(map, center.lat + getRandom(), center.lng + getRandom());
+        {% endfor %}
+    }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7QotcvbA1NNGwDjNa5Bwh_VaOyqAN4LU&callback=initMap">
+    </script>
+
     {% if error %}
         <div class="alert alert-danger" role="alert">
             {{error.status}} - {{error.status}}
         </div>
     {% else %}
+        <h1>Alerts</h1>
+        <div id="map" style="height: 60%;width: 100%"></div>
         {% for alert in alerts %}
             <a href="alert/{{alert.uuid}}">
                 <div class="card text-white bg-success mb-3">
