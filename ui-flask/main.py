@@ -105,7 +105,9 @@ def hello():
 def sms():
     msg, to, uuid = get_contact_user()
     SMS_HISTORY[to] = uuid
-    message = get_twilio_client().messages.create(to=to, from_=TWILIO_FROM_PHONE, body=msg)
+    body = '''{}
+TEXT 1 to ACCEPT!'''.format(msg)
+    message = get_twilio_client().messages.create(to=to, from_=TWILIO_FROM_PHONE, body=body)
     call_id = voice_call()
     return json.dumps({'message': message.sid, 'call': call_id})
 
@@ -171,9 +173,10 @@ def voice_handle():
             # If the caller didn't choose 1 or 2, apologize and ask them again
             resp.say("Sorry, I don't understand that choice.")
     gather = Gather(num_digits=1)
-    gather.say(MSG_STORE[uuid, to])
+    body = '''{}, press 1 to accept!'''.format(MSG_STORE[uuid, to])
+    gather.say(body)
     resp.append(gather)
-    resp.redirect('/voice')
+    resp.redirect('/voice_respond', method='POST')
     return str(resp)
 
 
