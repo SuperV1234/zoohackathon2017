@@ -11,7 +11,6 @@ TWILIO_ACCOUNT = os.getenv('TWILIO_ACCOUNT')
 TWILIO_AUTH = os.getenv('TWILIO_AUTH')
 TWILIO_CLIENT = Client(TWILIO_ACCOUNT, TWILIO_AUTH)
 TWILIO_FROM_PHONE = os.getenv('TWILIO_FROM_PHONE', '+441803500679')
-
 SMS_HISTORY = {}
 
 
@@ -23,7 +22,7 @@ def hello():
 @app.route('/sms/<uuid>/<to>/<msg>')
 def sms(uuid, to, msg):
     SMS_HISTORY[to] = uuid
-    message = TWILIO_CLIENT.messages.create(to=to, from_=sms, body=msg)
+    message = TWILIO_CLIENT.messages.create(to=to, from_=TWILIO_FROM_PHONE, body=msg)
     return message.sid
 
 
