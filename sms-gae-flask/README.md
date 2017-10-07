@@ -5,3 +5,5 @@ API
 GET @ url:``sms``/``<id>``/``<to_number>``/``<message>``
 
 On success returns a string with the sms sent id.
+
+twilio.com/user/account/phone-numbers/verified
