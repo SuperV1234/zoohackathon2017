@@ -88,6 +88,7 @@ def watch_csv_log(path):
         except:
             eprint(f"Error processing CSV line: '{line}' - skipping")
 
+manual_mode = True
 mock_target_number = "+441234567890"
 
 def to_human_form(alert: Alert) -> str:
@@ -122,7 +123,9 @@ class AlertDB(object):
 
         self.http_client.fetch("http://localhost:80/sms", handle_response, method='POST', headers=None, body=body)
 
-    def add_new(self, alert: Alert, manual_mode: bool):
+    def add_new(self, alert: Alert):
+        global manual_mode
+
         self.alerts.append(alert)
         xuuid = alert.uuid
 
@@ -189,19 +192,29 @@ class AllHandler(tornado.web.RequestHandler):
     def get(self):
         self.write(to_uuid_dict(map_stripped_alerts(self.application.alert_db.alerts)))
 
+class ManualModeHandler(tornado.web.RequestHandler):
+    def get(self):
+        global manual_mode
+        self.write({ "manual_mode": manual_mode })
+
+    def post(self):
+        global manual_mode
+        manual_mode = self.get_argument('manual_mode', '')
+        self.write({"success": True})
+
 class AlertApp(tornado.web.Application):
     def __init__(self):
         self.alert_db = AlertDB(tornado.httpclient.AsyncHTTPClient())
-        self.manual_mode = True
 
         super(AlertApp, self).__init__([
             (r"/", MainHandler),
             (r"/get_single", SingleHandler),
             (r"/get_all", AllHandler),
+            (r"/manual_mode", ManualModeHandler),
         ])
 
     def add_new_alert(self, alert: Alert):
-        self.alert_db.add_new(alert, self.manual_mode)
+        self.alert_db.add_new(alert)
 
 def main():
     parser = argparse.ArgumentParser(description='Parses Zoohackathon 2017 alert CSVs.')
