@@ -92,9 +92,9 @@ def sms_reply():
     app.logger.info('got response {} {} {}'.format(uuid, from_, body))
 
     if uuid is not None and body:
-        requests.post('localhost:8888', data={'uuid': uuid,
-                                              "old_state": 'to_acknowledge',
-                                              "new_state": 'in_progress'})
+        requests.post('http://localhost:8888', data={'uuid': uuid,
+                                                     "old_state": 'to_acknowledge',
+                                                     "new_state": 'in_progress'})
 
         resp = MessagingResponse()
         resp.message('{} ACCEPTED'.format(uuid))
