@@ -6,18 +6,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap-alpha.min.css') }}">
 
     <script src="{{ url_for('static', filename='js/jquery/jquery-3.2.1.slim.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/popper/popper-1.11.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+
+
     {% block head %}
     <h1>PLEASE DEFINE A "head" BLOCK</h1>
     {% endblock %}
 </head>
 
 <body>
+  <!-- Just an image -->
     {% block full_body %}
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
