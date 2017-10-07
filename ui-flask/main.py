@@ -77,10 +77,16 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    lone = {'name': 'Lone'}
+    lone =  {'name': 'Lone'}
     texas = {'name': 'Texas'}
     power = {'name': 'Power'}
-    return render_template('rangers.html', rangers=[lone, texas, power])
+    lone1 =  {'name': 'John'}
+    texas1 = {'name': 'Jack'}
+    power1 = {'name': 'Sophie'}
+    lone2 =  {'name': 'Lone'}
+    texas2 = {'name': 'Texas'}
+    power2 = {'name': 'Power'}
+    return render_template('rangers.html', rangers=[lone, texas, power,lone1, texas1, power1,lone2, texas2, power2])
 
 
 @app.route('/ranger/<name>')
