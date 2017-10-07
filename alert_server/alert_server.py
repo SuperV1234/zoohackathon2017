@@ -106,8 +106,9 @@ class AlertDB(object):
         post_data = { 'uuid': xuuid, 'to': mock_target_number, 'msg': msg }
         body = urllib.parse.urlencode(post_data)
 
-        req = f"http://130.211.200.69/sms/{xuuid}/{mock_target_number}/{urllib.parse.quote(msg)}"
-        verbose_print(f"Request:\n{req}Body:\n{body}")
+        # req = f"http://130.211.200.69/sms/{xuuid}/{mock_target_number}/{urllib.parse.quote(msg)}"
+        # req = f"http://localhost:80/sms/{xuuid}/{mock_target_number}/{urllib.parse.quote(msg)}"
+        # verbose_print(f"Request:\n{req}Body:\n{body}")
 
         def handle_response(response):
             if response.error:
@@ -115,7 +116,7 @@ class AlertDB(object):
             else:
                 print(response.body)
 
-        self.http_client.fetch("http://130.211.200.69/sms", handle_response, method='POST', headers=None, body=body)
+        self.http_client.fetch("http://localhost:80/sms", handle_response, method='POST', headers=None, body=body)
 
     def add_new(self, alert: Alert, manual_mode: bool):
         self.alerts.append(alert)
