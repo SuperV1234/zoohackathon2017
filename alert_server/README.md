@@ -39,8 +39,11 @@
 1. Start the server with:
 
    ```bash
-   rm -f alerts.csv.offset      # remove monitoring metadata, if existing
-   ./alert_server.py alerts.csv # start server, monitor `alerts.csv`
+   # remove monitoring metadata, if existing
+   rm -f alerts.csv.offset
+
+   # start server, monitor `alerts.csv`, send sms to "+441234567890"
+   ./alert_server.py alerts.csv +441234567890
    ```
 
 2. Via a `GET` request, check what alerts have been dispatched, but not yet acknowledged:
