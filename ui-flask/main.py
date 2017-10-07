@@ -156,7 +156,7 @@ def voice_call():
     return call.sid
 
 
-@app.route("/voice_handle", methods=['GET'])
+@app.route("/voice_handle", methods=['GET', 'POST'])
 def voice_handle():
     uuid, to = request.args.get('uuid'), request.args.get('to')
     resp = VoiceResponse()
