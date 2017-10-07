@@ -86,16 +86,6 @@ def ranger(name):
     return render_template('ranger.html', name=name)
 
 
-@app.route('/alerts/')
-def alerts():
-    return render_template('alerts.html')
-
-
-@app.route('/alert/<name>')
-def alert(name):
-    return render_template('alert.html', name=name)
-
-
 @app.route('/')
 def hello():
     return 'SmartAlert'
