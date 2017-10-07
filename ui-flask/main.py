@@ -37,9 +37,10 @@ def serve_static(path):
 @app.route('/alerts/')
 def alerts():
     url = "http://{}:{}/get_all".format(LOGREADER_ADDRESS, LOGREADER_PORT)
-    response = requests.get(url)
-    if(response.status_code != 200):
-        return render_template('alerts.html', error=True, message=response.text)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.ConnectionError as e:
+        return render_template('alerts.html', error=True, message=e.response.text)
     else:
         alerts = list(response.json().values())
         return render_template('alerts.html', error=False, alerts=alerts)
@@ -48,9 +49,10 @@ def alerts():
 @app.route('/alert/<id>')
 def alert(id):
     url = "http://{}:{}/get_single?uuid={}".format(LOGREADER_ADDRESS, LOGREADER_PORT, id)
-    response = requests.get(url)
-    if(response.status_code != 200):
-        return render_template('alerts.html', error=True, message=response.text)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.ConnectionError as e:
+        return render_template('alerts.html', error=True, message=e.response.text)
     else:
         return render_template('alert.html', error=False, alert=response.json())
 
