@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% block head %}
+
 {% endblock %}
 
 {% block body %}
+    {% for alert in alerts %}
+        <a href="alert/{{alert.id}}">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">{{alert.type}}</div>
+                <div class="card-body">
+                    <h4 class="card-title">Success card title</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
 {% endblock %}

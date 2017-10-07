@@ -11,7 +11,8 @@ def serve_static(path):
 
 
 @app.route("/")
-def index():
+@app.route('/alerts/')
+def alerts():
     alert = {
         "type": "Ground Sensor",
         "time": datetime.now(),
@@ -19,7 +20,7 @@ def index():
         "id": "1234567",
         "status": "warn"
     }
-    return render_template('index.html', alerts=[alert, alert, alert])
+    return render_template('alerts.html', alerts=[alert, alert, alert])
 
 
 @app.route('/dashboard/')
@@ -45,11 +46,6 @@ def rangers():
 @app.route('/ranger/<name>')
 def ranger(name):
     return render_template('ranger.html', name=name)
-
-
-@app.route('/alerts/')
-def alerts():
-    return render_template('alerts.html')
 
 
 @app.route('/alert/<name>')
