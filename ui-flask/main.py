@@ -2,6 +2,7 @@ import functools
 import json
 import logging
 import os
+from urllib.parse import quote
 
 import requests
 from flask import Flask, request
@@ -20,7 +21,6 @@ def get_twilio_client():
 
 
 TWILIO_FROM_PHONE = os.getenv('TWILIO_FROM_PHONE', '+441803500679')
-TWILIO_CLIENT = Client(TWILIO_ACCOUNT, TWILIO_AUTH)
 
 SMS_HISTORY = {}
 MSG_STORE = {}
@@ -40,9 +40,10 @@ def serve_static(path):
 @app.route('/alerts/')
 def alerts():
     url = "http://{}:{}/get_all".format(LOGREADER_ADDRESS, LOGREADER_PORT)
-    response = requests.get(url)
-    if (response.status_code != 200):
-        return render_template('alerts.html', error=True, message=response.text)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.ConnectionError as e:
+        return render_template('alerts.html', error=True, message=e.response.text)
     else:
         alerts = list(response.json().values())
         return render_template('alerts.html', error=False, alerts=alerts)
@@ -51,9 +52,10 @@ def alerts():
 @app.route('/alert/<id>')
 def alert(id):
     url = "http://{}:{}/get_single?uuid={}".format(LOGREADER_ADDRESS, LOGREADER_PORT, id)
-    response = requests.get(url)
-    if (response.status_code != 200):
-        return render_template('alerts.html', error=True, message=response.text)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.ConnectionError as e:
+        return render_template('alerts.html', error=True, message=e.response.text)
     else:
         return render_template('alert.html', error=False, alert=response.json())
 
@@ -75,10 +77,16 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    lone =  {'name': 'Lone'} 
-    texas = {'name': 'Texas'} 
-    power = {'name': 'Power'} 
-    return render_template('rangers.html', rangers=[lone, texas, power])
+    lone =  {'name': 'Lone'}
+    texas = {'name': 'Texas'}
+    power = {'name': 'Power'}
+    lone1 =  {'name': 'John'}
+    texas1 = {'name': 'Jack'}
+    power1 = {'name': 'Sophie'}
+    lone2 =  {'name': 'Lone'}
+    texas2 = {'name': 'Texas'}
+    power2 = {'name': 'Power'}
+    return render_template('rangers.html', rangers=[lone, texas, power,lone1, texas1, power1,lone2, texas2, power2])
 
 
 @app.route('/ranger/<name>')
@@ -90,13 +98,16 @@ def ranger(name):
 def hello():
     return 'SmartAlert'
 
+
 # TWILIO SMS SERVICE
 
 @app.route('/sms', methods=['POST'])
 def sms():
     msg, to, uuid = get_contact_user()
     SMS_HISTORY[to] = uuid
-    message = get_twilio_client().messages.create(to=to, from_=TWILIO_FROM_PHONE, body=msg)
+    body = '''{}
+TEXT 1 to ACCEPT!'''.format(msg)
+    message = get_twilio_client().messages.create(to=to, from_=TWILIO_FROM_PHONE, body=body)
     call_id = voice_call()
     return json.dumps({'message': message.sid, 'call': call_id})
 
@@ -138,19 +149,22 @@ def voice_call():
     call = get_twilio_client().calls.create(
         to=to,
         from_=TWILIO_FROM_PHONE,
-        url="{}/voice_handle?uuid={}&to{}".format('https://precocial-tang-6014.dataplicity.io', uuid, to)
+        url="{}/voice_handle?uuid={}&to={}".format('http://precocial-tang-6014.dataplicity.io',
+                                                   quote(uuid),
+                                                   quote(to))
     )
     return call.sid
 
 
 @app.route("/voice_handle", methods=['GET'])
-def voice_handle(uuid, to):
+def voice_handle():
+    uuid, to = request.args.get('uuid'), request.args.get('to')
     resp = VoiceResponse()
     if 'Digits' in request.values:
         choice = request.values['Digits']
         if choice == '1':
             resp.say('Alert accepted!')
-            TWILIO_CLIENT.messages.create(to=to, from_=TWILIO_FROM_PHONE, body=accept_alert(uuid))
+            get_twilio_client().messages.create(to=to, from_=TWILIO_FROM_PHONE, body=accept_alert(uuid))
             return str(resp)
         elif choice == '2':
             resp.say('Try again!')
@@ -159,9 +173,10 @@ def voice_handle(uuid, to):
             # If the caller didn't choose 1 or 2, apologize and ask them again
             resp.say("Sorry, I don't understand that choice.")
     gather = Gather(num_digits=1)
-    gather.say(MSG_STORE[uuid, to])
+    body = '''{}, press 1 to accept!'''.format(MSG_STORE[uuid, to])
+    gather.say(body)
     resp.append(gather)
-    resp.redirect('/voice')
+    resp.redirect('/voice_respond', method='POST')
     return str(resp)
 
 
@@ -174,5 +189,3 @@ def server_error(e):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-

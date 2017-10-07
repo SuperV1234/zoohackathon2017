@@ -5,7 +5,9 @@
 {% block body %}
     <script>
     function initMap() {
-        var center = {lat: -0.669482, lng: 35.787419};
+        deltaLat = (Math.random() - 0.5) / 2;
+        deltaLon = (Math.random() - 0.5) / 2;
+        var center = {lat: -0.669482 + deltaLat, lng: 35.787419 + deltaLon};
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 9,
             center: center,
@@ -20,7 +22,10 @@
             fillOpacity: 0.35,
             map: map,
             center: center,
-            radius: 8000
+            radius: 8000,
+            mapTypeControlOptions: {
+                position: google.maps.ControlPosition.LEFT_BOTTOM
+            }
           });
     }
     </script>
@@ -28,17 +33,19 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7QotcvbA1NNGwDjNa5Bwh_VaOyqAN4LU&callback=initMap">
     </script>
 
-    <h1>Alert</h1>
-    {% if error %}
-        <div class="alert alert-danger" role="alert">
-            <p>Error:</p>
-            <p>{{error.status}} - {{error.status}}</p>
-        </div>
-    {% else %}
-        <div id="map" style="height: 500px;width: 500px"></div>
-        <h3>Status: <span class="badge badge-success">Acknowledged</span></h3>
-        <h3>Type: {{alert.name}}</h3>
-        <h3>Time: {{alert.datetime}}</h3>
-        <h3>Label: {{alert.label|default("No label received", true)}}</h3>
-    {% endif %}
+    <div class="container" style="height: 100%">
+        <h1>Alert</h1>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <p>Error:</p>
+                <p>{{error.status}} - {{error.status}}</p>
+            </div>
+        {% else %}
+            <div id="map" style="height: 70%;width: 100%"></div>
+            <h3>Status: <span class="badge badge-success">Acknowledged</span></h3>
+            <h3>Type: {{alert.name}}</h3>
+            <h3>Time: {{alert.datetime}}</h3>
+            <h3>Label: {{alert.label|default("No label received", true)}}</h3>
+        {% endif %}
+    </div>
 {% endblock %}

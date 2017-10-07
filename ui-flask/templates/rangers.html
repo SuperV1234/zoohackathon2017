@@ -3,14 +3,19 @@
 {% endblock %}
 
 {% block body %}
+
+    <div class="list-group">
     {% for ranger in rangers %}
-      <div class="card card-inverse card-info mb-3 text-center">
-        <div class="card-block">
-          <a href="/ranger/{{ranger.name}}">
-	  <blockquote class="card-blockquote">
-	   <p class="card-text">{{ranger.name}}</p>
-	   </blockquote>
-	  </div>
-	</div>
+      <a href="../ranger/{{ranger.name}}" class="list-group-item list-group-item-action flex-column align-items-start ranger" style="background: #4f92df; color: #fff;">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ranger.name}} </h5>
+          <small>ON DUTY</small>
+        </div>
+        <p class="mb-1">07551 112 321</p>
+      </a>
     {% endfor %}
+    </div>
+
+<br><br>
+
 {% endblock %}

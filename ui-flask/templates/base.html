@@ -13,6 +13,21 @@
     <script src="{{ url_for('static', filename='js/popper/popper-1.11.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
 
+    <style>
+    a:hover
+    {
+      text-decoration: none;
+    }
+
+    .ranger
+    {
+      margin-bottom: 5px;
+    }
+    .ranger:hover
+    {
+      font-weight: bold;
+    }
+    </style>
 
     {% block head %}
     <h1>PLEASE DEFINE A "head" BLOCK</h1>
@@ -22,7 +37,7 @@
 <body>
   <!-- Just an image -->
     {% block full_body %}
-        <div class="container">
+        <div class="container" style="height: 100%">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="/">
                     <img alt="Home" src="{{ url_for('static', filename='icons/home.svg') }}"/>

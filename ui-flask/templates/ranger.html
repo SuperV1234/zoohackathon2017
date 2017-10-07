@@ -3,7 +3,66 @@
 {% endblock %}
 
 {% block body %}
-  <h1> Name: {{name}} <h1/>
-  Contact:
-  Location:
+
+  <div class="jumbotron">
+    <h1> Ranger: {{name}}</h1>
+  </div>
+
+  <div class="page-header">
+    <h2> History </h2>
+  </div>
+
+<div>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Interventions
+      <span class="badge badge-default badge-pill" style="background:#000">26</span>
+    </li>
+    <a href="../team/team-sector-5">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Team
+    <span class="badge badge-default badge-pill" style="background:#000">Rangers 2</span>
+  </li>
+  </a>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Area
+    <span class="badge badge-default badge-pill" style="background:#000">NORTH-EAST</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Role
+    <span class="badge badge-default badge-pill" style="background:#000">Team Leader</span>
+  </li>
+</ul>
+
+</div>
+<br><br>
+<div class="page-header">
+  <h2> Personal Information </h2>
+</div>
+<div>
+  <ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Age
+    <span class="badge badge-default badge-pill" style="background:#000">36</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Specialty
+    <span class="badge badge-default badge-pill" style="background:#000">Tigers</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+   Experience
+    <span class="badge badge-default badge-pill" style="background:#000">10 years</span>
+  </li>
+</ul>
+
+</div>
+<br>
+<br>
+
+  <button type="button" class="btn btn-primary btn-lg btn-block">MODIFY</button>
+
+<br><br>
+
+
+
 {% endblock %}
