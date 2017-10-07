@@ -75,9 +75,9 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    lone =  {'name': 'Lone'} 
-    texas = {'name': 'Texas'} 
-    power = {'name': 'Power'} 
+    lone = {'name': 'Lone'}
+    texas = {'name': 'Texas'}
+    power = {'name': 'Power'}
     return render_template('rangers.html', rangers=[lone, texas, power])
 
 
@@ -89,6 +89,7 @@ def ranger(name):
 @app.route('/')
 def hello():
     return 'SmartAlert'
+
 
 # TWILIO SMS SERVICE
 
@@ -144,7 +145,8 @@ def voice_call():
 
 
 @app.route("/voice_handle", methods=['GET'])
-def voice_handle(uuid, to):
+def voice_handle():
+    uuid, to = request.args.get('uuid'), request.args.get('to')
     resp = VoiceResponse()
     if 'Digits' in request.values:
         choice = request.values['Digits']
@@ -174,5 +176,3 @@ def server_error(e):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
