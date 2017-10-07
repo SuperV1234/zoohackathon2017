@@ -26,6 +26,7 @@ class Alert(object):
         self.label = cleanup_label(label)
         self.state = state
         self.target = AlertTarget(None)
+        self.code = 1234 # TODO: generate randomly, check collisions
 
     def __repr__(self) -> str:
         return f'''Alert[{self.uuid}]
@@ -93,7 +94,7 @@ mock_target_number = "+441234567890"
 
 def to_human_form(alert: Alert) -> str:
     a = alert
-    return f'{a.name} ({a.label}) at {a.datetime}'
+    return f'[{a.code}] {a.name} ({a.label}) at {a.datetime}'
 
 class AlertDB(object):
     def __init__(self, http_client):
@@ -105,15 +106,11 @@ class AlertDB(object):
         global mock_target_number
 
         alert.target = AlertTarget("+441234567890")
-        msg = f"ALERT: {to_human_form(alert)}\n\nTEXT 1 TO ACKNOWLEDGE"
+        msg = f"ALERT: {to_human_form(alert)}"
         xuuid = alert.uuid;
 
         post_data = { 'uuid': xuuid, 'to': mock_target_number, 'msg': msg }
         body = urllib.parse.urlencode(post_data)
-
-        # req = f"http://130.211.200.69/sms/{xuuid}/{mock_target_number}/{urllib.parse.quote(msg)}"
-        # req = f"http://localhost:80/sms/{xuuid}/{mock_target_number}/{urllib.parse.quote(msg)}"
-        # verbose_print(f"Request:\n{req}Body:\n{body}")
 
         def handle_response(response):
             if response.error:
@@ -202,6 +199,16 @@ class ManualModeHandler(tornado.web.RequestHandler):
         manual_mode = self.get_argument('manual_mode', '')
         self.write({"success": True})
 
+class MessageHandler(tornado.web.RequestHandler):
+    def get(self):
+        # TODO: given 4digit code, return list of messages
+        pass
+
+    def post(self):
+        # TODO: given 4digit code and message, append message to alert list of message
+        # TODO: if 4digit code is wrong, return success:false
+        pass
+
 class AlertApp(tornado.web.Application):
     def __init__(self):
         self.alert_db = AlertDB(tornado.httpclient.AsyncHTTPClient())
@@ -211,6 +218,7 @@ class AlertApp(tornado.web.Application):
             (r"/get_single", SingleHandler),
             (r"/get_all", AllHandler),
             (r"/manual_mode", ManualModeHandler),
+            (r"/message", MessageHandler),
         ])
 
     def add_new_alert(self, alert: Alert):
@@ -230,7 +238,6 @@ def main():
 
     def csv_watchdog():
         for alert in watch_csv_log(args.path):
-            # pprint.pprint(alert)
             app.add_new_alert(alert)
 
     tornado.ioloop.PeriodicCallback(csv_watchdog, 100).start()
