@@ -3,4 +3,14 @@
 {% endblock %}
 
 {% block body %}
+    {% for ranger in rangers %}
+      <div class="card card-inverse card-info mb-3 text-center">
+        <div class="card-block">
+          <a href="/ranger/{{ranger.name}}">
+	  <blockquote class="card-blockquote">
+	   <p class="card-text">{{ranger.name}}</p>
+	   </blockquote>
+	  </div>
+	</div>
+    {% endfor %}
 {% endblock %}

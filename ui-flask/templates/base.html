@@ -12,12 +12,15 @@
     <script src="{{ url_for('static', filename='js/jquery/jquery-3.2.1.slim.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/popper/popper-1.11.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+
+
     {% block head %}
     <h1>PLEASE DEFINE A "head" BLOCK</h1>
     {% endblock %}
 </head>
 
 <body>
+  <!-- Just an image -->
     {% block full_body %}
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -33,12 +36,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="users/">
+                            <a class="nav-link" href="/teams_or_rangers/">
                                 <img alt="Manage Team" src="{{ url_for('static', filename='icons/team.svg') }}"/>
                             </a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="manual/">
+                            <a class="nav-link" href="/manual/">
                                 <img alt="Manual" src="{{ url_for('static', filename='icons/map.svg') }}"/>
                             </a>
                         </li>
