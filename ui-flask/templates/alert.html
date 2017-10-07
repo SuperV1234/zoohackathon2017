@@ -5,7 +5,9 @@
 {% block body %}
     <script>
     function initMap() {
-        var center = {lat: -0.669482, lng: 35.787419};
+        deltaLat = (Math.random() - 0.5) / 2;
+        deltaLon = (Math.random() - 0.5) / 2;
+        var center = {lat: -0.669482 + deltaLat, lng: 35.787419 + deltaLon};
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 9,
             center: center,
