@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block head %}
+{% endblock %}
+
+{% block body %}
+  <div class="card card-inverse card-info mb-3 text-center">
+    <div class="card-block">
+      <a href="{{ url_for("teams") }}">
+      <blockquote class="card-blockquote">
+        <button type="button" class="btn btn-primary btn-lg btn-block">TEAMS</button>
+      </blockquote>
+    </div>
+  </div>
+  <div class="card card-inverse card-info mb-3 text-center">
+    <div class="card-block">
+      <a href="{{ url_for("rangers") }}">
+        <button type="button" class="btn btn-primary btn-lg btn-block">RANGERS</button>
+      </a>
+    </div>
+  </div>
+{% endblock %}
