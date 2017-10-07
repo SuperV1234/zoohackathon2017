@@ -2,6 +2,7 @@ import functools
 import json
 import logging
 import os
+from urllib.parse import quote
 
 import requests
 from flask import Flask, request
@@ -139,7 +140,9 @@ def voice_call():
     call = get_twilio_client().calls.create(
         to=to,
         from_=TWILIO_FROM_PHONE,
-        url="{}/voice_handle?uuid={}&to{}".format('http://precocial-tang-6014.dataplicity.io', uuid, to)
+        url="{}/voice_handle?uuid={}&to={}".format('http://precocial-tang-6014.dataplicity.io',
+                                                   quote(uuid),
+                                                   quote(to))
     )
     return call.sid
 
