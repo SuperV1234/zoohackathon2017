@@ -16,7 +16,8 @@ def index():
         "type": "Ground Sensor",
         "time": datetime.now(),
         "label": "Elephant",
-        "id": "1234567"
+        "id": "1234567",
+        "status": "warn"
     }
     return render_template('index.html', alerts=[alert, alert, alert])
 
