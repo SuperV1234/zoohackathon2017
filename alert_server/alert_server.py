@@ -243,9 +243,9 @@ def main():
     app = AlertApp()
     app.listen(8888)
 
-    alert_csv_generator = watch_csv_log(args.path)
     def csv_watchdog():
         try:
+            alert_csv_generator = watch_csv_log(args.path)
             app.add_new_alert(next(alert_csv_generator))
         except:
             pass
