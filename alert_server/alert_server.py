@@ -199,11 +199,15 @@ class AllHandler(tornado.web.RequestHandler):
 class ManualModeHandler(tornado.web.RequestHandler):
     def get(self):
         global manual_mode
+        verbose_print(f'[MainHandler]: received GET for manual mode')
         self.write({ "manual_mode": manual_mode })
 
     def post(self):
         global manual_mode
+
+
         manual_mode = self.get_argument('manual_mode', '')
+        verbose_print(f'[MainHandler]: received POST for manual mode: {manual_mode})')
         self.write({"success": True})
 
 class MessageHandler(tornado.web.RequestHandler):
