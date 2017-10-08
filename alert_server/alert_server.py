@@ -101,6 +101,7 @@ class AlertDB(object):
         self.alerts = []
         self.uuid_to_alert = {}
         self.http_client = http_client
+        self.ctr = 0
 
     def dispatch(self, alert: Alert):
         global mock_target_number
@@ -129,7 +130,13 @@ class AlertDB(object):
         verbose_print(f'[AlertDB]: Added new alert\n{alert}\n')
         self.uuid_to_alert[xuuid] = alert
 
-        if manual_mode == True:
+        self.ctr += 1
+        if self.ctr == 3:
+            verbose_print(f'[AlertDB]: {xuuid} now in progress')
+            alert.state = "in_progress"
+            alert.target = AlertTarget(mock_target_number)
+            self.ctr = 0
+        elif manual_mode == True:
             verbose_print(f'[AlertDB]: {xuuid} now requires manual intervention')
             alert.state = "to_manually_dispatch"
         else:
@@ -236,11 +243,14 @@ def main():
     app = AlertApp()
     app.listen(8888)
 
+    alert_csv_generator = watch_csv_log(args.path)
     def csv_watchdog():
-        for alert in watch_csv_log(args.path):
-            app.add_new_alert(alert)
+        try:
+            app.add_new_alert(next(alert_csv_generator))
+        except:
+            pass
 
-    tornado.ioloop.PeriodicCallback(csv_watchdog, 100).start()
+    tornado.ioloop.PeriodicCallback(csv_watchdog, 1000).start()
     tornado.ioloop.IOLoop.current().start()
 
 if __name__ == "__main__":
