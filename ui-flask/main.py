@@ -84,16 +84,16 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    lone =  {'name': 'Lone'}
+    lone = {'name': 'Lone'}
     texas = {'name': 'Texas'}
     power = {'name': 'Power'}
-    lone1 =  {'name': 'John'}
+    lone1 = {'name': 'John'}
     texas1 = {'name': 'Jack'}
     power1 = {'name': 'Sophie'}
-    lone2 =  {'name': 'Lone'}
+    lone2 = {'name': 'Lone'}
     texas2 = {'name': 'Texas'}
     power2 = {'name': 'Power'}
-    return render_template('rangers.html', rangers=[lone, texas, power,lone1, texas1, power1,lone2, texas2, power2])
+    return render_template('rangers.html', rangers=[lone, texas, power, lone1, texas1, power1, lone2, texas2, power2])
 
 
 @app.route('/ranger/<name>')
@@ -153,12 +153,14 @@ def accept_alert(uuid):
 def voice_call():
     msg, to, uuid = get_contact_user()
     MSG_STORE[uuid, to] = msg
+    url = "{}/voice_handle?uuid={}&to={}".format('http://precocial-tang-6014.dataplicity.io',
+                                                 quote(uuid),
+                                                 quote(to))
+    app.logger.warn('{} - {} - {} at {}'.format(uuid, to, msg, url))
     call = get_twilio_client().calls.create(
         to=to,
         from_=TWILIO_FROM_PHONE,
-        url="{}/voice_handle?uuid={}&to={}".format('http://precocial-tang-6014.dataplicity.io',
-                                                   quote(uuid),
-                                                   quote(to))
+        url=url
     )
     return call.sid
 
@@ -193,6 +195,9 @@ def server_error(e):
     logging.exception('An error occurred during a request. {}'.format(e))
     return 'An internal error occurred.', 500
 
+
+app.logger.addHandler(logging.StreamHandler())
+app.logger.setLevel(logging.INFO)
 
 if __name__ == "__main__":
     app.run(debug=True)
