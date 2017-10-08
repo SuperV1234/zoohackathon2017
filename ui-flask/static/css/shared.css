@@ -5,3 +5,6 @@ html, body {
 .navbar .navbar-brand img, .navbar .nav-item img {
     height: 64px;
 }
+
+.toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 10px; height: 30px;}
+.toggle.ios .toggle-handle { border-radius: 10px; height: 30px;}
