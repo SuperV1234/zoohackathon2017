@@ -51,6 +51,8 @@ def alerts():
                 alert["isIntruder"] = True
             if "ARMED" in alert["label"]:
                 alert["isArmed"] = True
+            if "SENSOR" in alert["name"]:
+                alert["isSensor"] = True
         return render_template('alerts.html', error=False, alerts=alerts, teams=[1,2,3,4])
 
 

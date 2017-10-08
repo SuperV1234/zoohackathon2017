@@ -85,6 +85,9 @@
                             {% if alert.isArmed %}
                                 <img class="img-flipped" alt="Armed" src="{{ url_for('static', filename='icons/armed.svg') }}"/>
                             {% endif %}
+                            {% if alert.isSensor %}
+                                <img class="img-flipped" alt="Sensor" src="{{ url_for('static', filename='icons/camera.svg') }}"/>
+                            {% endif %}
                         </p>
                     </div>
                 </div>
