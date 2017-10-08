@@ -7,4 +7,6 @@ html, body {
 }
 
 .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 10px; height: 30px;}
+.toggle-off.ios { background: #000000;}
+.toggle-on.ios { background: #000000;}
 .toggle.ios .toggle-handle { border-radius: 10px; height: 30px;}

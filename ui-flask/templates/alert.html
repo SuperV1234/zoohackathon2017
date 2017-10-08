@@ -34,18 +34,47 @@
     </script>
 
     <div class="container" style="height: 100%">
-        <h1>Alert</h1>
+
+      <div class="jumbotron" style="margin-top:5px; margin-bottom:5px;">
+        <h1>{{alert.name}}</h1>
+         <div class="badge badge-success" style="width:100%; padding:10px; font-size:18px; font-weight: 400;">STATUS: ACKNOWLEDGED</div>
+
+
+      </div>
+
+
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 <p>Error:</p>
                 <p>{{error.status}} - {{error.status}}</p>
             </div>
         {% else %}
-            <div id="map" style="height: 60%;width: 100%"></div>
-            <h3>Status: <span class="badge badge-success">Acknowledged</span></h3>
-            <h3>Type: {{alert.name}}</h3>
-            <h3>Time: {{alert.datetime}}</h3>
-            <h3>Label: {{alert.label|default("No label received", true)}}</h3>
+            <div id="map" style="height: 50%;width: 100%"></div>
+            <div class="jumbotron" style="font-size:20px; margin-top:10px;">
+            <h5>Type: {{alert.name}}</h5>
+            <h5>Time: {{alert.datetime}}</h5>
+            <h5>Label: {{alert.label|default("No label received", true)}}</h5>
+          </div>
+
+          <div class="alert alert-success" role="alert">
+            18:43 pm - Acknowledged, ranger John Newton
+          </div>
+          <div class="alert alert-danger" role="alert">
+            18:53 pm - Observed poacher chasing beautiful lion
+          </div>
+          <div class="alert alert-warning" role="alert">
+            18:55 pm - Chasing target - target armed
+          </div>
+          <div class="alert alert-success" role="alert">
+            18:58 pm - Target Acquired John Newton
+          </div>
+          <div class="alert alert-warning" role="alert">
+            17:01 pm - Other poachers seen in distance
+          </div>
+          <div class="alert alert-success" role="alert">
+            21:43 pm - Reported back to Colonel Vlad
+          </div>
+          <br><br>
         {% endif %}
     </div>
 {% endblock %}
