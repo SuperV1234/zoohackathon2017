@@ -60,16 +60,10 @@
         </div>
     {% else %}
     <div class="jumbotron" style="margin-top:10px; margin-bottom:10px;">
-      <h1> Smart Alert <input type="checkbox" checked data-toggle="toggle" data-style="ios" data-on="AUTOMATIC MODE" data-off="MANUAL MODE" ></h1>
+      <h1> Smart Alert <div class="toggle"><input type="checkbox" checked data-toggle="toggle" data-style="ios" data-on="AUTOMATIC MODE" data-off="MANUAL MODE" ></div></h1>
       <span class="badge badge-pill badge-success">15 TEAMS ON DUTY</span> <br>
       <span class="badge badge-pill badge-info">0 OUSTANDING ALERTS</span>
-
     </div>
-
-
-
-
-<br><br>
 
         <div id="map" style="height: 60%;width: 100%" ></div>
         {% for alert in alerts %}

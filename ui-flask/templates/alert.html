@@ -4,6 +4,44 @@
 
 {% block body %}
     <script>
+
+    function httpGet()
+    {
+
+        $.ajax(
+          {
+            type: "GET",
+            url: "/get_single?uuid={{id}}",
+            success: function(result)
+              {
+
+                var jsss = JSON.parse(result);
+                var state = jsss["state"];
+
+                if (state=="in_progress")
+                {
+                  state = "IN PROGRESS";
+                }
+                if (state=="to_manually_dispatch")
+                {
+                  state = "MANUAL DISPATCH";
+                }
+                if (state=="to_acknowledge")
+                {
+                  state = "PENDING";
+                }
+
+                document.getElementById("status").innerHTML = state;
+                //console.log(result);
+                console.log(result);
+
+              }
+          }
+        );
+
+
+    }
+
     function initMap() {
         deltaLat = (Math.random() - 0.5) / 2;
         deltaLon = (Math.random() - 0.5) / 2;
@@ -34,18 +72,67 @@
     </script>
 
     <div class="container" style="height: 100%">
-        <h1>Alert</h1>
+
+      <div class="jumbotron" style="margin-top:5px; margin-bottom:5px;">
+        <h1>{{alert.name}}</h1>
+         <div class="badge badge-success" style="width:100%; padding:10px; font-size:18px; font-weight: 400;" id="status">STATUS: ACKNOWLEDGED</div>
+
+
+      </div>
+
+
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 <p>Error:</p>
                 <p>{{error.status}} - {{error.status}}</p>
             </div>
         {% else %}
-            <div id="map" style="height: 60%;width: 100%"></div>
-            <h3>Status: <span class="badge badge-success">Acknowledged</span></h3>
-            <h3>Type: {{alert.name}}</h3>
-            <h3>Time: {{alert.datetime}}</h3>
-            <h3>Label: {{alert.label|default("No label received", true)}}</h3>
+            <div id="map" style="height: 50%;width: 100%"></div>
+            <div class="jumbotron" style="font-size:20px; margin-top:10px;">
+            <h5>Type: {{alert.name}}</h5>
+            <h5>Time: {{alert.datetime}}</h5>
+            <h5>Label: {{alert.label|default("No label received", true)}}</h5>
+          </div>
+
+          <form action="http://172.16.0.113:8888/" method="post">
+            <input type="hidden" name="uuid" value="{{id}}" />
+            <input type="hidden" name="new_state" value="to_acknowledge" />
+            <input type="hidden" name="old_state" value="to_manually_dispatch" />
+            <button type="submit" class="btn btn-primary btn-lg btn-block">MAKE VOICE CALL</button>
+          </form>
+          <br>
+
+          <form action="" method="post">
+            <button type="button" class="btn btn-primary btn-lg btn-block">SEND MESSAGE</button>
+          </form>
+
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+            <li><a href="#">Regular link</a></li>
+            <li class="disabled"><a href="#">Disabled link</a></li>
+            <li><a href="#">Another link</a></li>
+          </ul>
+          <br>
+
+
+          <div class="alert alert-success" role="alert">
+            18:43 pm - Acknowledged, ranger John Newton
+          </div>
+          <div class="alert alert-danger" role="alert">
+            18:53 pm - Observed poacher chasing beautiful lion
+          </div>
+          <div class="alert alert-warning" role="alert">
+            18:55 pm - Chasing target - target armed
+          </div>
+          <div class="alert alert-success" role="alert">
+            18:58 pm - Target Acquired John Newton
+          </div>
+          <div class="alert alert-warning" role="alert">
+            17:01 pm - Other poachers seen in distance
+          </div>
+          <div class="alert alert-success" role="alert">
+            21:43 pm - Reported back to Colonel Vlad
+          </div>
+          <br><br>
         {% endif %}
     </div>
 {% endblock %}
