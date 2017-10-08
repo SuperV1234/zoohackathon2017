@@ -40,30 +40,14 @@
   <!-- Just an image -->
     {% block full_body %}
         <div class="container" style="height: 100%">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-light bg-light">
                 <a class="navbar-brand" href="/">
                     <img alt="Home" src="{{ url_for('static', filename='icons/home.svg') }}"/>
                 </a>
+                <a class="navbar-brand" href="/teams_or_rangers/">
+                    <img alt="People" src="{{ url_for('static', filename='icons/team.svg') }}"/>
+                </a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/teams_or_rangers/">
-                                <img alt="Manage Team" src="{{ url_for('static', filename='icons/team.svg') }}"/>
-                            </a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/manual/">
-                                <img alt="Manual" src="{{ url_for('static', filename='icons/map.svg') }}"/>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
             </nav>
             {% block body %}
             <h1>PLEASE DEFINE A "body" BLOCK</h1>
