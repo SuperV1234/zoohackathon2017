@@ -54,13 +54,30 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7QotcvbA1NNGwDjNa5Bwh_VaOyqAN4LU&callback=initMap">
     </script>
 
+    <script>
+        function manual_toggled() {
+            var manual = document.querySelectorAll('input[type=checkbox]')[0].checked;
+            console.log("Sending /set_manual/" + manual);
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/set_manual/" + manual, true);
+            xhttp.send();
+            xhttp.onload = function() {
+                console.log("Toggled response received");
+            }
+        }
+    </script>
+
     {% if error %}
         <div class="alert alert-danger" role="alert">
             {{error.status}} - {{error.status}}
         </div>
     {% else %}
     <div class="jumbotron" style="margin-top:10px; margin-bottom:10px;">
-      <h1> Smart Alert <input type="checkbox" checked data-toggle="toggle" data-style="ios" data-on="AUTOMATIC MODE" data-off="MANUAL MODE" ></h1>
+      <h1> Smart Alert
+          <a onclick="manual_toggled();" >
+              <input type="checkbox" checked data-toggle="toggle" data-style="ios" data-on="AUTOMATIC MODE" data-off="MANUAL MODE" >
+          </a>
+      </h1>
       <span class="badge badge-pill badge-success">15 TEAMS ON DUTY</span> <br>
       <span class="badge badge-pill badge-info">0 OUSTANDING ALERTS</span>
 

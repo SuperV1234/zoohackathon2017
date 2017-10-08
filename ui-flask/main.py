@@ -58,6 +58,13 @@ def serve_static(path):
     return send_from_directory('static', path)
 
 
+@app.route("/set_manual/<enabled>", methods=['POST'])
+def manually_checkbock_toggled(enabled):
+    url = "http://{}:{}/manual_mode".format(LOGREADER_ADDRESS, LOGREADER_PORT)
+    response = requests.post(url, {"manual_mode": enabled})
+    return "Success"
+
+
 @app.route("/")
 @app.route('/alerts/')
 def alerts():
