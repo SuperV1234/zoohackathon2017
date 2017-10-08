@@ -74,12 +74,23 @@
         <div id="map" style="height: 60%;width: 100%" ></div>
         {% for alert in alerts %}
             <a href="alert/{{alert.uuid}}">
-                <div class="card text-white bg-success mb-3">
+                <div class="card text-white bg-{{alert.style}} mb-3">
                     <div class="card-header">Time: {{alert.datetime}}</div>
                     <div class="card-body">
                         <h4 class="card-title">{{alert.name|capitalize}}</h4>
-                        <p class="card-text">{{alert.label}}</p>
-			<img alt="{{alert.name}}" src="/static/icons/{{alert.name}}.svg" style="height: 100px; float: right"/>
+                        <p class="card-text">{{alert.label}}
+                            {% if alert.isIntruder %}
+                                <img alt="Intruder" src="{{ url_for('static', filename='icons/intruder.svg') }}" style="height: 60px; float: right"//>
+                            {% endif %}
+                            {% if alert.isArmed %}
+                                <img class="img-flipped" alt="Armed" src="{{ url_for('static', filename='icons/armed.svg') }}" style="height: 60px; float: right"//>
+                            {% endif %}
+                            {% if alert.isSensor %}
+                                <img class="img-flipped" alt="Sensor" src="{{ url_for('static', filename='icons/camera.svg') }}" style="height: 60px; float: right"//>
+                            {% endif %}
+                        </p>
+                        <p>{{alert.state_text|capitalize}}</p>
+			<img alt="{{alert.name}}" src="/static/icons/{{alert.name}}.svg" style="height: 100px; float: left"/>
                     </div>
                 </div>
             </a>
