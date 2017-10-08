@@ -31,6 +31,28 @@ LOGREADER_PORT = os.environ["LOG_PARSER_PORT"]
 app = Flask(__name__)
 
 
+def style_from_state(state):
+    if state == "to_manually_dispatch":
+        return "danger"
+    elif state == "to_acknowledge":
+        return "warning"
+    elif state == "in_progress":
+        return "info"
+    else:
+        return "success"
+
+
+def style_to_text(state):
+    if state == "to_manually_dispatch":
+        return "to be dispatched"
+    elif state == "to_acknowledge":
+        return "to be acknowledged"
+    elif state == "in_progress":
+        return "in progress"
+    else:
+        return state.replace("_", " ")
+
+
 @app.route('/static/<path:path>')
 def serve_static(path):
     return send_from_directory('static', path)
@@ -53,6 +75,9 @@ def alerts():
                 alert["isArmed"] = True
             if "SENSOR" in alert["name"]:
                 alert["isSensor"] = True
+
+            alert["style"] = style_from_state(alert["state"])
+            alert["state_text"] = style_to_text(alert["state"])
         return render_template('alerts.html', error=False, alerts=alerts, teams=[1,2,3,4])
 
 

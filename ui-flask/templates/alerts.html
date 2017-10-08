@@ -74,7 +74,7 @@
         <div id="map" style="height: 60%;width: 100%" ></div>
         {% for alert in alerts %}
             <a href="alert/{{alert.uuid}}">
-                <div class="card text-white bg-success mb-3">
+                <div class="card text-white bg-{{alert.style}} mb-3">
                     <div class="card-header">Time: {{alert.datetime}}</div>
                     <div class="card-body">
                         <h4 class="card-title">{{alert.name|capitalize}}</h4>
@@ -89,6 +89,7 @@
                                 <img class="img-flipped" alt="Sensor" src="{{ url_for('static', filename='icons/camera.svg') }}"/>
                             {% endif %}
                         </p>
+                        <p>{{alert.state_text|capitalize}}</p>
                     </div>
                 </div>
             </a>
