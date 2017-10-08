@@ -77,16 +77,16 @@ def team(name):
 
 @app.route('/rangers/')
 def rangers():
-    lone =  {'name': 'Lone'}
+    lone = {'name': 'Lone'}
     texas = {'name': 'Texas'}
     power = {'name': 'Power'}
-    lone1 =  {'name': 'John'}
+    lone1 = {'name': 'John'}
     texas1 = {'name': 'Jack'}
     power1 = {'name': 'Sophie'}
-    lone2 =  {'name': 'Lone'}
+    lone2 = {'name': 'Lone'}
     texas2 = {'name': 'Texas'}
     power2 = {'name': 'Power'}
-    return render_template('rangers.html', rangers=[lone, texas, power,lone1, texas1, power1,lone2, texas2, power2])
+    return render_template('rangers.html', rangers=[lone, texas, power, lone1, texas1, power1, lone2, texas2, power2])
 
 
 @app.route('/ranger/<name>')
@@ -127,13 +127,26 @@ def sms_reply():
     app.logger.info('got response {} {} {}'.format(uuid, from_, body))
 
     if uuid is not None and body:
-        requests.post('http://localhost:8888', data={'uuid': uuid,
-                                                     "old_state": 'to_acknowledge',
-                                                     "new_state": 'in_progress'})
+        if body.strip() == '1':
+            requests.post('http://localhost:8888', data={'uuid': uuid,
+                                                         "old_state": 'to_acknowledge',
+                                                         "new_state": 'in_progress'})
+            resp = MessagingResponse()
+            resp.message(accept_alert(uuid))
+            return str(resp)
+        elif body.startswith('2 '):
+            resp = MessagingResponse()
+            params = [b for b in body.split(' ') if b]
+            if len(params) >= 3 and params[0] == '2':
+                uuid = params[1]
+                msg = ' '.join(params[2:])
+                requests.post('http://localhost:8888', data={'uuid': uuid,
+                                                             "old_state": 'to_acknowledge',
+                                                             "new_state": msg})
 
-        resp = MessagingResponse()
-        resp.message(accept_alert(uuid))
-        return str(resp)
+            else:
+                resp.message('message must follow format: 2 <id> <msg>')
+            return str(resp)
 
     return None
 
