@@ -61,6 +61,7 @@ def serve_static(path):
 @app.route("/set_manual/<enabled>", methods=['POST'])
 def manually_checkbock_toggled(enabled):
     url = "http://{}:{}/manual_mode".format(LOGREADER_ADDRESS, LOGREADER_PORT)
+    print("Sending request to", url, " with manual_mode:", enabled)
     response = requests.post(url, {"manual_mode": enabled})
     return "Success"
 
