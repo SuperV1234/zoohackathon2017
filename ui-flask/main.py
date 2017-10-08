@@ -97,7 +97,7 @@ def alert(id):
     except requests.exceptions.ConnectionError as e:
         return render_template('alerts.html', error=True, message=e.response.text)
     else:
-        return render_template('alert.html', error=False, alert=response.json())
+        return render_template('alert.html', error=False, alert=response.json(), id=id)
 
 
 @app.route('/teams_or_rangers/')
@@ -177,6 +177,12 @@ def sms_reply():
 
     return None
 
+
+@app.route("/get_single", methods=['GET'])
+def get_status():
+    uuid =  request.args.get('uuid')
+    response = requests.get("http://{}:{}/get_single".format(LOGREADER_ADDRESS, LOGREADER_PORT), data={'uuid': uuid})
+    return json.dumps(response.json())
 
 def accept_alert(uuid):
     return '{} ACCEPTED'.format(uuid)

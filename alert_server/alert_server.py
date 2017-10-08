@@ -246,7 +246,8 @@ def main():
     def csv_watchdog():
         try:
             alert_csv_generator = watch_csv_log(args.path)
-            app.add_new_alert(next(alert_csv_generator))
+            for alert in alert_csv_generator:
+                app.add_new_alert(alert)
         except:
             pass
 
