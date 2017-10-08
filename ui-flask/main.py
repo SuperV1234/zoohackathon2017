@@ -46,6 +46,11 @@ def alerts():
         return render_template('alerts.html', error=True, message=e.response.text)
     else:
         alerts = list(response.json().values())
+        for alert in alerts:
+            if "INTRUDER" in alert["label"]:
+                alert["isIntruder"] = True
+            if "ARMED" in alert["label"]:
+                alert["isArmed"] = True
         return render_template('alerts.html', error=False, alerts=alerts, teams=[1,2,3,4])
 
 

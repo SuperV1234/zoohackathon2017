@@ -46,6 +46,7 @@
             <h3>Type: {{alert.name}}</h3>
             <h3>Time: {{alert.datetime}}</h3>
             <h3>Label: {{alert.label|default("No label received", true)}}</h3>
+            <h3>{{ contains(alert.label, "INTRUDER" )}}</h3>
         {% endif %}
     </div>
 {% endblock %}

@@ -2,9 +2,18 @@ html, body {
     height: 100%;
 }
 
-.navbar .navbar-brand img, .navbar .nav-item img {
+.navbar .navbar-brand img, .navbar .nav-item img, .card-text img {
     height: 64px;
 }
 
 .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 10px; height: 30px;}
 .toggle.ios .toggle-handle { border-radius: 10px; height: 30px;}
+
+img.img-flipped {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}

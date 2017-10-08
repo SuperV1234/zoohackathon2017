@@ -78,7 +78,14 @@
                     <div class="card-header">Time: {{alert.datetime}}</div>
                     <div class="card-body">
                         <h4 class="card-title">{{alert.name|capitalize}}</h4>
-                        <p class="card-text">{{alert.label}}</p>
+                        <p class="card-text">{{alert.label}}
+                            {% if alert.isIntruder %}
+                                <img alt="Home" src="{{ url_for('static', filename='icons/intruder.svg') }}"/>
+                            {% endif %}
+                            {% if alert.isArmed %}
+                                <img class="img-flipped" alt="Home" src="{{ url_for('static', filename='icons/armed.svg') }}"/>
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </a>
