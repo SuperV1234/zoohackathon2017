@@ -31,6 +31,28 @@ LOGREADER_PORT = os.environ["LOG_PARSER_PORT"]
 app = Flask(__name__)
 
 
+def style_from_state(state):
+    if state == "to_manually_dispatch":
+        return "danger"
+    elif state == "to_acknowledge":
+        return "warning"
+    elif state == "in_progress":
+        return "info"
+    else:
+        return "success"
+
+
+def style_to_text(state):
+    if state == "to_manually_dispatch":
+        return "to be dispatched"
+    elif state == "to_acknowledge":
+        return "to be acknowledged"
+    elif state == "in_progress":
+        return "in progress"
+    else:
+        return state.replace("_", " ")
+
+
 @app.route('/static/<path:path>')
 def serve_static(path):
     return send_from_directory('static', path)
@@ -46,6 +68,16 @@ def alerts():
         return render_template('alerts.html', error=True, message=e.response.text)
     else:
         alerts = list(response.json().values())
+        for alert in alerts:
+            if "INTRUDER" in alert["label"]:
+                alert["isIntruder"] = True
+            if "ARMED" in alert["label"]:
+                alert["isArmed"] = True
+            if "SENSOR" in alert["name"]:
+                alert["isSensor"] = True
+
+            alert["style"] = style_from_state(alert["state"])
+            alert["state_text"] = style_to_text(alert["state"])
         return render_template('alerts.html', error=False, alerts=alerts, teams=[1,2,3,4])
 
 
@@ -127,26 +159,13 @@ def sms_reply():
     app.logger.info('got response {} {} {}'.format(uuid, from_, body))
 
     if uuid is not None and body:
-        if body.strip() == '1':
-            requests.post('http://localhost:8888', data={'uuid': uuid,
-                                                         "old_state": 'to_acknowledge',
-                                                         "new_state": 'in_progress'})
-            resp = MessagingResponse()
-            resp.message(accept_alert(uuid))
-            return str(resp)
-        elif body.startswith('2 '):
-            resp = MessagingResponse()
-            params = [b for b in body.split(' ') if b]
-            if len(params) >= 3 and params[0] == '2':
-                uuid = params[1]
-                msg = ' '.join(params[2:])
-                requests.post('http://localhost:8888', data={'uuid': uuid,
-                                                             "old_state": 'to_acknowledge',
-                                                             "new_state": msg})
+        requests.post('http://localhost:8888', data={'uuid': uuid,
+                                                     "old_state": 'to_acknowledge',
+                                                     "new_state": 'in_progress'})
 
-            else:
-                resp.message('message must follow format: 2 <id> <msg>')
-            return str(resp)
+        resp = MessagingResponse()
+        resp.message(accept_alert(uuid))
+        return str(resp)
 
     return None
 
@@ -165,12 +184,14 @@ def accept_alert(uuid):
 def voice_call():
     msg, to, uuid = get_contact_user()
     MSG_STORE[uuid, to] = msg
+    url = "{}/voice_handle?uuid={}&to={}".format('http://precocial-tang-6014.dataplicity.io',
+                                                 quote(uuid),
+                                                 quote(to))
+    app.logger.warn('{} - {} - {} at {}'.format(uuid, to, msg, url))
     call = get_twilio_client().calls.create(
         to=to,
         from_=TWILIO_FROM_PHONE,
-        url="{}/voice_handle?uuid={}&to={}".format('http://precocial-tang-6014.dataplicity.io',
-                                                   quote(uuid),
-                                                   quote(to))
+        url=url
     )
     return call.sid
 
@@ -205,6 +226,9 @@ def server_error(e):
     logging.exception('An error occurred during a request. {}'.format(e))
     return 'An internal error occurred.', 500
 
+
+app.logger.addHandler(logging.StreamHandler())
+app.logger.setLevel(logging.INFO)
 
 if __name__ == "__main__":
     app.run(debug=True)

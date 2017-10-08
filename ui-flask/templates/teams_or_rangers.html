@@ -6,11 +6,16 @@
 
       <br><br>
       <a href="{{ url_for("teams") }}">
-        <button type="button" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-trash"></span>TEAMS</button>
+        <button type="button" class="btn btn-primary btn-lg btn-block"  style="height: 100px">
+          <img alt="Teams" src="{{ url_for('static', filename='icons/teams.svg') }}"  style="height: 100%"/>
+          <img alt="Teams" src="{{ url_for('static', filename='icons/teams.svg') }}"  style="height: 100%"/>
+	</button>
       </a>
       <br>
       <a href="{{ url_for("rangers") }}">
-        <button type="button" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-bullhorn">RANGERS</span></button>
+        <button type="button" class="btn btn-primary btn-lg btn-block" style="height: 100px">
+          <img alt="Rangers" src="{{ url_for('static', filename='icons/policeman.svg') }}"  style="height: 100%"/>
+	</button>
       </a>
       <br><br>
 {% endblock %}
