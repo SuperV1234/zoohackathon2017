@@ -72,7 +72,7 @@ def alerts():
     try:
         response = requests.get(url)
     except requests.exceptions.ConnectionError as e:
-        return render_template('alerts.html', error=True, message=e.response.text)
+        return render_template('alerts.html', error=True, message="An error occourred")
     else:
         alerts = list(response.json().values())
         for alert in alerts:
