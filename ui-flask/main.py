@@ -25,8 +25,8 @@ TWILIO_FROM_PHONE = os.getenv('TWILIO_FROM_PHONE', '+441803500679')
 SMS_HISTORY = {}
 MSG_STORE = {}
 
-LOGREADER_ADDRESS = os.environ["LOG_PARSER_ADDRESS"]
-LOGREADER_PORT = os.environ["LOG_PARSER_PORT"]
+LOGREADER_ADDRESS = os.environ.get("LOG_PARSER_ADDRESS", "localhost")
+LOGREADER_PORT = os.environ.get("LOG_PARSER_PORT", 8888)
 
 app = Flask(__name__)
 
