@@ -4,6 +4,44 @@
 
 {% block body %}
     <script>
+
+    function httpGet()
+    {
+
+        $.ajax(
+          {
+            type: "GET",
+            url: "/get_single?uuid={{id}}",
+            success: function(result)
+              {
+
+                var jsss = JSON.parse(result);
+                var state = jsss["state"];
+
+                if (state=="in_progress")
+                {
+                  state = "IN PROGRESS";
+                }
+                if (state=="to_manually_dispatch")
+                {
+                  state = "MANUAL DISPATCH";
+                }
+                if (state=="to_acknowledge")
+                {
+                  state = "PENDING";
+                }
+
+                document.getElementById("status").innerHTML = state;
+                //console.log(result);
+                console.log(result);
+
+              }
+          }
+        );
+
+
+    }
+
     function initMap() {
         deltaLat = (Math.random() - 0.5) / 2;
         deltaLon = (Math.random() - 0.5) / 2;
@@ -37,7 +75,7 @@
 
       <div class="jumbotron" style="margin-top:5px; margin-bottom:5px;">
         <h1>{{alert.name}}</h1>
-         <div class="badge badge-success" style="width:100%; padding:10px; font-size:18px; font-weight: 400;">STATUS: ACKNOWLEDGED</div>
+         <div class="badge badge-success" style="width:100%; padding:10px; font-size:18px; font-weight: 400;" id="status">STATUS: ACKNOWLEDGED</div>
 
 
       </div>
@@ -55,6 +93,26 @@
             <h5>Time: {{alert.datetime}}</h5>
             <h5>Label: {{alert.label|default("No label received", true)}}</h5>
           </div>
+
+          <form action="http://172.16.0.113:8888/" method="post">
+            <input type="hidden" name="uuid" value="{{id}}" />
+            <input type="hidden" name="new_state" value="to_acknowledge" />
+            <input type="hidden" name="old_state" value="to_manually_dispatch" />
+            <button type="submit" class="btn btn-primary btn-lg btn-block">MAKE VOICE CALL</button>
+          </form>
+          <br>
+
+          <form action="" method="post">
+            <button type="button" class="btn btn-primary btn-lg btn-block">SEND MESSAGE</button>
+          </form>
+
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+            <li><a href="#">Regular link</a></li>
+            <li class="disabled"><a href="#">Disabled link</a></li>
+            <li><a href="#">Another link</a></li>
+          </ul>
+          <br>
+
 
           <div class="alert alert-success" role="alert">
             18:43 pm - Acknowledged, ranger John Newton
